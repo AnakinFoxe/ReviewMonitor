@@ -1,0 +1,22 @@
+1,2676882011,Prime Instant Video
+1,9013971011,Video Shorts
+1,163856011,Digital Music Store
+1,5916440011,Accessories
+1,283155,Books
+1,1266092011,TV & Video
+1,2335752011,Cell Phones & Accessories
+1,1077068,Car Electronics & GPS
+1,2956501011,Laptops & Tablets
+1,172456,Computer Accessories & Peripherals
+1,193870011,Computer Parts & Components
+1,284507,Kitchen & Dining
+1,2619525011,Appliances
+1,6682399011,Mens Grooming
+1,7147441011,Men
+1,7147440011,Women
+1,2206626011,Athletic Clothing
+1,10971181011,All Sports & Fitness
+1,15684181,Automotive Parts & Accessories
+1,3248684011,Car/Vehicle Electronics & GPS
+0,1001423601,Watch Anywhere
+0,1000645111,Amazon Apps
