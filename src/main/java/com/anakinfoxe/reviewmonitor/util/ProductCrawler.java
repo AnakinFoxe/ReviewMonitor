@@ -7,10 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This crawler will search and grab all the products given manufacturer name
@@ -73,6 +70,8 @@ public class ProductCrawler {
 
                     productObj.setModelNum(modelNum);
                 }
+
+                productObj.setUpdateDate(new Date());
 
                 System.out.println("Product " + productId + " obtained");
 

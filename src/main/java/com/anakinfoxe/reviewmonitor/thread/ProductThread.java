@@ -1,7 +1,9 @@
 package com.anakinfoxe.reviewmonitor.thread;
 
 import com.anakinfoxe.reviewmonitor.model.Product;
+import com.anakinfoxe.reviewmonitor.repository.ProductRepository;
 import com.anakinfoxe.reviewmonitor.util.ProductCrawler;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 import java.util.concurrent.Callable;

@@ -40,6 +40,7 @@ public class NodeCrawler {
                     Node nodeObj = new Node();
                     nodeObj.setName(name);
                     nodeObj.setNodeId(refNodeMatcher.group(1));
+                    nodeObj.setUpdateDate(new Date());
 
                     return nodeObj;
                 }

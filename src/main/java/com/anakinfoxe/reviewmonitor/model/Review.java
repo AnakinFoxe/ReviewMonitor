@@ -1,25 +1,39 @@
 package com.anakinfoxe.reviewmonitor.model;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
  * Created by xing on 2/16/15.
  */
+@Entity
 public class Review {
 
+    @Id
+    @GeneratedValue
     private Long id;
 
+    @NotNull
+    @Column(unique = true)
+    @Size(min=1, max=256)
     private String name;
 
     private Integer rate;
 
+    @Size(min=1, max=2048)
     private String title;
 
     private Date date;
 
+    @Size(min=1, max=2048)
     private String permalink;
 
     private Float helpRatio;
+
+    @ManyToOne
+    private Product product;    // owner of OneToMany
 
     public Review() {
     }
@@ -78,5 +92,13 @@ public class Review {
 
     public void setHelpRatio(Float helpRatio) {
         this.helpRatio = helpRatio;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

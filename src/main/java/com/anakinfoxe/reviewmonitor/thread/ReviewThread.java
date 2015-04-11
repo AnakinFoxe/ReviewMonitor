@@ -17,9 +17,12 @@ public class ReviewThread implements Callable<Map<String, Review>> {
         this.productId_ = productId;
     }
 
+
     @Override
     public Map<String, Review> call() throws Exception {
+
         ReviewCrawler rc = new ReviewCrawler();
         return rc.crawl(productId_);
+
     }
 }
