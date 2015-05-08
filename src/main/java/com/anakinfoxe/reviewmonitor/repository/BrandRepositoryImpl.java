@@ -1,6 +1,7 @@
 package com.anakinfoxe.reviewmonitor.repository;
 
 import com.anakinfoxe.reviewmonitor.model.Brand;
+import com.anakinfoxe.reviewmonitor.model.Node;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -29,9 +30,10 @@ public class BrandRepositoryImpl implements BrandRepository {
 
     @Override
     public Brand loadById(Long id) {
+
         try {
-            String qStr = "select g from Brand where g.id = :id";
-            Query query = em.createQuery(qStr, Brand.class);
+            String hql = "select g from Brand g where g.id = :id";
+            Query query = em.createQuery(hql, Brand.class);
             query.setParameter("id", id);
 
             return (Brand) query.getSingleResult();
@@ -43,8 +45,8 @@ public class BrandRepositoryImpl implements BrandRepository {
     @Override
     public Brand loadByName(String name) {
         try {
-            String qStr = "select g from Brand where g.name = :name";
-            Query query = em.createQuery(qStr, Brand.class);
+            String hql = "select g from Brand g where g.name = :name";
+            Query query = em.createQuery(hql, Brand.class);
             query.setParameter("name", name);
 
             return (Brand) query.getSingleResult();
@@ -56,8 +58,8 @@ public class BrandRepositoryImpl implements BrandRepository {
     @Override
     public List<Brand> loadAll() {
         try {
-            String qStr = "select g from Brand";
-            Query query = em.createQuery(qStr, Brand.class);
+            String hql = "select g from Brand g";
+            Query query = em.createQuery(hql, Brand.class);
 
             return query.getResultList();
         } catch (NoResultException e) {

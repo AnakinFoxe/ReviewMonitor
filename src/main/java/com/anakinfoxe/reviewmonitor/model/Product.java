@@ -1,8 +1,11 @@
 package com.anakinfoxe.reviewmonitor.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +14,7 @@ import java.util.List;
  * Created by xing on 2/16/15.
  */
 @Entity
+@XmlRootElement
 public class Product {
 
     @Id
@@ -35,9 +39,12 @@ public class Product {
     // this field is used to determine whether needs to renew product info
     private Date updateDate;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private transient List<Review> reviews = new ArrayList<>();
 
+    @JsonIgnore
+    @NotNull
     @ManyToOne
     private Brand brand;    // owner of OneToMany
 
@@ -98,5 +105,13 @@ public class Product {
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
     }
 }

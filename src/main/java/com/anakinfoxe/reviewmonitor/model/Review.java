@@ -1,14 +1,18 @@
 package com.anakinfoxe.reviewmonitor.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 /**
  * Created by xing on 2/16/15.
  */
 @Entity
+@XmlRootElement
 public class Review {
 
     @Id
@@ -32,8 +36,13 @@ public class Review {
 
     private Float helpRatio;
 
+    @JsonIgnore
     @ManyToOne
     private Product product;    // owner of OneToMany
+
+    @JsonIgnore
+    @ManyToOne
+    private Brand brand;    // owner of OneToMany
 
     public Review() {
     }
@@ -100,5 +109,13 @@ public class Review {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
     }
 }

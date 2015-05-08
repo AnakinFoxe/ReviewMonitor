@@ -1,12 +1,12 @@
 package com.anakinfoxe.reviewmonitor.service;
 
+import com.anakinfoxe.reviewmonitor.model.Brand;
 import com.anakinfoxe.reviewmonitor.model.Node;
 import com.anakinfoxe.reviewmonitor.model.Product;
 import com.anakinfoxe.reviewmonitor.model.Review;
-import com.anakinfoxe.reviewmonitor.repository.NodeRepository;
+import com.anakinfoxe.reviewmonitor.repository.BrandRepository;
 import com.anakinfoxe.reviewmonitor.repository.ProductRepository;
 import com.anakinfoxe.reviewmonitor.repository.ReviewRepository;
-import com.anakinfoxe.reviewmonitor.thread.MonitorThread;
 import com.anakinfoxe.reviewmonitor.thread.ProductThread;
 import com.anakinfoxe.reviewmonitor.thread.ReviewThread;
 import com.anakinfoxe.reviewmonitor.util.NodeCrawler;
@@ -27,7 +27,7 @@ import java.util.concurrent.*;
 public class CrawlerServiceImpl implements CrawlerService {
 
     @Autowired
-    NodeRepository nodeRepository;
+    BrandRepository brandRepository;
 
     @Autowired
     ProductRepository productRepository;
@@ -40,9 +40,13 @@ public class CrawlerServiceImpl implements CrawlerService {
     private final int MAX_AWAIT_HOURS_4_PRODUCT_    = 5;
     private final int MAX_AWAIT_HOURS_4_REVIEW_     = 16;
 
+    private Brand brand_;
+
 
     @Transactional
-    public void crawlBrand(String brand) {
+    public int crawlBrand(String brand) {
+        // a little pre-processing
+        brand = brand.toLowerCase().trim();
 
         // get latest node info every time
         NodeCrawler nc = new NodeCrawler();
@@ -79,11 +83,26 @@ public class CrawlerServiceImpl implements CrawlerService {
 
         System.out.println("Crawled " + allProducts.size() + " products");
 
+        // if there's no product crawled, it's possible the brand name is incorrect
+        if (allProducts.size() == 0)
+            return 0;
+        else {
+            brand_ = brandRepository.loadByName(brand);
+
+            if (brand_ == null) {
+                brand_ = brandRepository.save(new Brand(brand));
+            }
+        }
+
         // send out review crawler for each product
         ExecutorService reviewExecutor
                 = Executors.newFixedThreadPool(MAX_REVIEW_THREAD_);
         Map<String, Future<Map<String, Review>>> futureReviews = new HashMap<>();
         for (Product product : allProducts.values()) {
+            // update brand mapping
+            product.setBrand(brand_);
+
+            // check database info
             Product savedProduct = productRepository.loadByProductId(product.getProductId());
 
             if (savedProduct != null) {
@@ -145,10 +164,17 @@ public class CrawlerServiceImpl implements CrawlerService {
             }
 
             // insert rest (new) reviews
-            for (Review review : productReviews.values())
+            for (Review review : productReviews.values()) {
+                // update product mapping
+                review.setProduct(savedProduct);
+                // update brand mapping
+                review.setBrand(brand_);
+
                 reviewRepository.save(review);
+            }
         }
 
+        return allReviews.size();   // number of products with reviews crawled
     }
 
     @Override

@@ -39,8 +39,8 @@ public class NodeRepositoryImpl implements NodeRepository {
     public Node loadById(Long id) {
 
         try {
-            String qStr = "select g from Node g where g.id = :id";
-            Query query = em.createQuery(qStr, Node.class);
+            String hql = "select g from Node g where g.id = :id";
+            Query query = em.createQuery(hql, Node.class);
             query.setParameter("id", id);
 
             return (Node) query.getSingleResult();
@@ -53,8 +53,8 @@ public class NodeRepositoryImpl implements NodeRepository {
     public List<Node> loadAll() {
 
         try {
-            String qStr = "select g from Node g";
-            Query query = em.createQuery(qStr, Node.class);
+            String hql = "select g from Node g";
+            Query query = em.createQuery(hql, Node.class);
 
             return query.getResultList();
         } catch (NoResultException e) {

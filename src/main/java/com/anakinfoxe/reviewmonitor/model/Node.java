@@ -21,7 +21,7 @@ public class Node {
     private String name;
 
     @NotNull
-    @Column(unique = true)
+    //@Column(unique = true)
     private String nodeId;
 
     private Date updateDate;

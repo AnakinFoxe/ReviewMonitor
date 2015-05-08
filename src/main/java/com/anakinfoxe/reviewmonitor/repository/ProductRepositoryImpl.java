@@ -1,5 +1,6 @@
 package com.anakinfoxe.reviewmonitor.repository;
 
+import com.anakinfoxe.reviewmonitor.model.Brand;
 import com.anakinfoxe.reviewmonitor.model.Product;
 import org.springframework.stereotype.Repository;
 
@@ -40,8 +41,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     public Product loadById(Long id) {
 
         try {
-            String qStr = "select g from Product g where g.id = :id";
-            Query query = em.createQuery(qStr, Product.class);
+            String hql = "select g from Product g where g.id = :id";
+            Query query = em.createQuery(hql, Product.class);
             query.setParameter("id", id);
 
             return (Product) query.getSingleResult();
@@ -53,8 +54,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Product loadByProductId(String productId) {
         try {
-            String qStr = "select g from Product g where g.productId = :productId";
-            Query query = em.createQuery(qStr, Product.class);
+            String hql = "select g from Product g where g.productId = :productId";
+            Query query = em.createQuery(hql, Product.class);
             query.setParameter("productId", productId);
 
             return (Product) query.getSingleResult();
@@ -64,11 +65,24 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public List<Product> loadAllByBrand(Brand brand) {
+        try {
+            String hql = "select g from Product g where g.brand = :brand";
+            Query query = em.createQuery(hql, Product.class);
+            query.setParameter("brand", brand);
+
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
     public List<Product> loadAll() {
 
         try {
-            String qStr = "select g from Product g";
-            Query query = em.createQuery(qStr, Product.class);
+            String hql = "select g from Product g";
+            Query query = em.createQuery(hql, Product.class);
 
             return query.getResultList();
         } catch (NoResultException e) {

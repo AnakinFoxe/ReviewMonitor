@@ -1,0 +1,151 @@
+body {
+    font-family: 'Roboto';
+    background: #f9f9f9;
+    /*margin: 0px;*/
+}
+
+h1 {
+    /*margin: auto;*/
+    font-size: 40px;
+    text-align: center;
+    color: #ffa23b;
+    text-shadow:
+    -1px -1px 0 #ffffff,
+    1px -1px 0 #ffffff,
+    -1px 1px 0 #ffffff,
+    1px 1px 0 #ffffff;
+}
+
+span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    margin: 0px;
+}
+
+.header {
+    background: url("../img/TheStarryNight.jpg");
+    no-repeat: center center fixed;
+    background-size: cover;
+    padding: 0px;
+    line-height: 100px;
+    height: 100px;
+}
+
+.left {
+    float: left;
+}
+
+.item {
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 0px;
+}
+
+.item:hover {
+    background: #fcfcfc;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+
+.brand {
+    margin: 20px;
+    padding: 20px;
+    height: 160px;
+    width: 160px;
+    font-size: 24px;
+    line-height: 120px;
+    text-align: center;
+    position: relative;
+}
+
+.review {
+    margin: 5px 0;
+    padding: 10px 0;
+    height: 40px;
+    width: 100%;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.model {
+    padding-left: 2%;
+    width: 10%;
+}
+
+.rating {
+    width: 10%;
+    text-align: center;
+}
+
+.title {
+    width: 66%;
+}
+
+.date {
+    padding-right: 2%;
+    width: 10%;
+    text-align: right;
+}
+
+.pagination {
+    margin: 10px 0px;
+}
+
+.pagination > li > a, .pagination > li > span {
+    border: 0px;
+}
+
+.pagination-sm > li:first-child > a, .pagination-sm > li:first-child > span {
+    border-radius: 0px;
+}
+
+.pagination > li:last-child > a, .pagination > li:last-child > span {
+    border-radius: 0px;
+}
+
+
+.btn {
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 0px;
+    margin: 20px 0 10px 0;
+    padding: 10px;
+    height: 40px;
+    width: 100px;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 0px;
+}
+
+.btn-single {
+    margin: 0 0 0 20px;
+}
+
+.btn-ok {
+    color: #fff;
+    background-color: #428bca;
+    margin: 20px 10px;
+}
+
+.btn-cancel {
+    color: #fff;
+    background-color: #f0ad4e;
+    margin: 20px 10px;
+}
+
+.modal-footer .btn + .btn {
+    margin: 20px 10px;
+}
+
+.modal-content {
+    border-radius: 0px;
+    background: #f9f9f9;
+}
+
+#addNew {
+    color: orangered;
+}
+
+

@@ -1,5 +1,6 @@
 package com.anakinfoxe.reviewmonitor.repository;
 
+import com.anakinfoxe.reviewmonitor.model.Brand;
 import com.anakinfoxe.reviewmonitor.model.Product;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public interface ProductRepository {
     Product loadById(Long id);
 
     Product loadByProductId(String productId);
+
+    List<Product> loadAllByBrand(Brand brand);
 
     List<Product> loadAll();
 }

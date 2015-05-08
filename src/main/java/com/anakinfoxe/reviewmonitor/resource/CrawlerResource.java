@@ -20,8 +20,8 @@ public class CrawlerResource {
     @GET
     public String startCrawling(@PathParam("brand") String brand) {
 
-        crawlerService.crawlBrand(brand);
+        int numOfProducts = crawlerService.crawlBrand(brand);
 
-        return brand + " crawling finished.";
+        return brand + " crawling finished. " + numOfProducts + " products (with reviews) crawled";
     }
 }

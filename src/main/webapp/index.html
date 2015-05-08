@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Review Monitor</title>
+
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <!-- AngularJS -->
+    <script src="js/angular/angular.min.js"></script>
+    <script src="js/angular/angular-route.min.js"></script>
+    <!-- Third party -->
+    <script src="js/thirdparty/ui-bootstrap-tpls-0.13.0.min.js"></script>
+    <script src="js/thirdparty/angular-cache.min.js"></script>
+    <script src="js/thirdparty/underscore-min.js"></script>
+
+</head>
+<body ng-app="ReviewMonitor">
+    <div class="header">
+        <div class="container">
+            <h1><span>Review Monitor</span></h1>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="container">
+            <div ng-view></div>
+        </div>
+    </div>
+
+
+    <!-- Modules -->
+    <script src="js/app.js"></script>
+
+    <!-- Controllers -->
+    <script src="js/controllers/BrandController.js"></script>
+    <script src="js/controllers/ReviewController.js"></script>
+    <script src="js/controllers/FilterModalController.js"></script>
+    <!-- Directives -->
+
+    <!-- Services -->
+    <script src="js/services/brands.js"></script>
+    <script src="js/services/reviews.js"></script>
+
+</body>
+</html>
