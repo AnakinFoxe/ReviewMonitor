@@ -1,0 +1,22 @@
+
+<div class="left btn-group">
+    <label class="btn" ng-model="sorting.latest" btn-checkbox><span>Latest first</span></label>
+    <label class="btn" ng-model="sorting.lowest" btn-checkbox><span>Lowest first</span></label>
+</div>
+<div class="left btn-group btn-single">
+    <button class="btn" ng-click="open()"><span>Filter</span></button>
+</div>
+
+<div class="left item review" ng-repeat="review in displayReviews">
+    <span class="model">Model #</span>
+    <span class="rating">{{ review.rate }} Stars</span>
+    <a href="{{ review.permalink }}" target="_blank">
+        <span class="title">{{ review.title }}</span>
+    </a>
+    <span class="date">{{ review.date | date }}</span>
+</div>
+
+<div class="left">
+    <pagination total-items="updatedReviews.length" ng-model="currentPage" max-size="maxSize" class="pagination-sm"
+                boundary-links="true"></pagination>
+</div>

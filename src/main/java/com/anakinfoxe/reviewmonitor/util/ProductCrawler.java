@@ -8,6 +8,8 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This crawler will search and grab all the products given manufacturer name
@@ -29,6 +31,9 @@ public class ProductCrawler {
     private final String Q_NEXT_PAGE_   = "pagnNextLink";
     private final String Q_PRODUCT_ID_  = "li[data-asin]";
     private final String Q_MODEL_NUM_   = "b:containsOwn(Item model number:)";
+
+    // Regular Expression Pattern
+    private final Pattern PTN_NUM_REVIEWS_ = Pattern.compile("([,\\d]+) customer review");
 
 
     private int maxRetries_ = 10;
@@ -69,6 +74,17 @@ public class ProductCrawler {
                     modelNum = modelNum.toUpperCase();
 
                     productObj.setModelNum(modelNum);
+                }
+
+                productObj.setNumOfReviewsOnPage(0);    // init as 0
+                Element numOfReviews = page.getElementById("acrCustomerReviewText");
+                if (numOfReviews != null) {
+                    Matcher matcher = PTN_NUM_REVIEWS_.matcher(numOfReviews.ownText().trim());
+
+                    if (matcher.find()) {
+                        String pureNumber = matcher.group(1).replaceAll(",", "");
+                        productObj.setNumOfReviewsOnPage(Integer.parseInt(pureNumber));
+                    }
                 }
 
                 productObj.setUpdateDate(new Date());

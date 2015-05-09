@@ -107,7 +107,7 @@ public class CrawlerServiceImpl implements CrawlerService {
 
             if (savedProduct != null) {
                 // if review number does not change, do not crawl
-                if (savedProduct.getNumOfReviewsOnPage() == product.getNumOfReviewsOnPage())
+                if (savedProduct.getNumOfReviewsOnPage().equals(product.getNumOfReviewsOnPage()))
                     continue;
 
                 // update database since product info changed
