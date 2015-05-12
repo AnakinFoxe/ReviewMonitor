@@ -23,11 +23,12 @@
        </servlet>
        <servlet-mapping>
               <servlet-name>ReviewMonitorServlet</servlet-name>
-              <url-pattern>/webapi/*</url-pattern>
+              <url-pattern>/webapi/rm/*</url-pattern>
        </servlet-mapping>
 
 
        <display-name>Review Monitor</display-name>
+
 
        <filter>
               <filter-name>CorsFilter</filter-name>

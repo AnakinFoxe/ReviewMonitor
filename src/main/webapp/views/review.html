@@ -7,13 +7,15 @@
     <button class="btn" ng-click="open()"><span>Filter</span></button>
 </div>
 
-<div class="left item review" ng-repeat="review in displayReviews">
-    <span class="model">Model #</span>
-    <span class="rating">{{ review.rate }} Stars</span>
-    <a href="{{ review.permalink }}" target="_blank">
-        <span class="title">{{ review.title }}</span>
-    </a>
-    <span class="date">{{ review.date | date }}</span>
+<div class="container">
+    <div class="left item review" ng-repeat="review in displayReviews">
+        <span class="model">Model #</span>
+        <span class="rating">{{ review.rate }} Stars</span>
+        <a href="{{ review.permalink }}" target="_blank">
+            <span class="title">{{ review.title }}</span>
+        </a>
+        <span class="date">{{ review.date | date }}</span>
+    </div>
 </div>
 
 <div class="left">

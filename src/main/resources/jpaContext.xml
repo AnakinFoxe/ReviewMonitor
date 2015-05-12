@@ -43,4 +43,10 @@
              p:url="jdbc:mysql://localhost:3306/ReviewMonitor?autoReconnect=true"
              p:username="root" p:password="password"/>
 
+
+       <!-- Task Executor and Scheduler -->
+       <!--<task:annotation-driven executor="myExecutor" scheduler="myScheduler"/>-->
+       <!--<task:executor id="myExecutor" pool-size="10"/>-->
+       <!--<task:scheduler id="myScheduler" pool-size="10"/>-->
+
 </beans>

@@ -12,6 +12,7 @@ import com.anakinfoxe.reviewmonitor.thread.ReviewThread;
 import com.anakinfoxe.reviewmonitor.util.NodeCrawler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -40,10 +41,7 @@ public class CrawlerServiceImpl implements CrawlerService {
     private final int MAX_AWAIT_HOURS_4_PRODUCT_    = 5;
     private final int MAX_AWAIT_HOURS_4_REVIEW_     = 16;
 
-    private Brand brand_;
-
-
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public int crawlBrand(String brand) {
         // a little pre-processing
         brand = brand.toLowerCase().trim();
@@ -83,14 +81,15 @@ public class CrawlerServiceImpl implements CrawlerService {
 
         System.out.println("Crawled " + allProducts.size() + " products");
 
+        Brand brandObj = null;
         // if there's no product crawled, it's possible the brand name is incorrect
         if (allProducts.size() == 0)
             return 0;
         else {
-            brand_ = brandRepository.loadByName(brand);
+            brandObj = brandRepository.loadByName(brand);
 
-            if (brand_ == null) {
-                brand_ = brandRepository.save(new Brand(brand));
+            if (brandObj == null) {
+                brandObj = brandRepository.save(new Brand(brand));
             }
         }
 
@@ -100,7 +99,7 @@ public class CrawlerServiceImpl implements CrawlerService {
         Map<String, Future<Map<String, Review>>> futureReviews = new HashMap<>();
         for (Product product : allProducts.values()) {
             // update brand mapping
-            product.setBrand(brand_);
+            product.setBrand(brandObj);
 
             // check database info
             Product savedProduct = productRepository.loadByProductId(product.getProductId());
@@ -168,7 +167,7 @@ public class CrawlerServiceImpl implements CrawlerService {
                 // update product mapping
                 review.setProduct(savedProduct);
                 // update brand mapping
-                review.setBrand(brand_);
+                review.setBrand(brandObj);
 
                 reviewRepository.save(review);
             }

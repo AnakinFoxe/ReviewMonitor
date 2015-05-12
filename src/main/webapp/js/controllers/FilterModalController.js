@@ -9,8 +9,8 @@ app.controller('FilterModalController', function($scope, $modalInstance, filters
     };
 
 
-    $scope.ok = function() {
-        $modalInstance.close($scope.selected);
+    $scope.ok = function(data) {
+        $modalInstance.close(data);
     };
 
     $scope.cancel = function() {

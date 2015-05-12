@@ -23,6 +23,14 @@ span {
     margin: 0px;
 }
 
+hr {
+    width: 100%;
+}
+
+.container {
+    padding: 0px;
+}
+
 .header {
     background: url("../img/TheStarryNight.jpg");
     no-repeat: center center fixed;
@@ -135,8 +143,41 @@ span {
     margin: 20px 10px;
 }
 
+.btn-before {
+    color: #fff;
+    background: #FF851B;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 0px;
+    margin: 10px 10px 10px 0px;
+    padding: 0px;
+    height: 20px;
+    width: 120px;
+    font-size: 12px;
+    line-height: 8px;
+    text-align: center;
+    border-radius: 0px;
+}
+
+.btn-after {
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 0px;
+    margin: 10px auto 10px 20px;
+    padding: 0px;
+    height: 20px;
+    width: 80px;
+    font-size: 12px;
+    line-height: 6px;
+    text-align: center;
+    border-radius: 0px;
+}
+
 .modal-footer .btn + .btn {
     margin: 20px 10px;
+}
+
+.modal-body {
+    padding-bottom: 10px;
 }
 
 .modal-content {
@@ -144,8 +185,33 @@ span {
     background: #f9f9f9;
 }
 
-#addNew {
+.progress {
+    margin: 10px 10px 10px 0px;
+    padding: 0px;
+}
+
+.form-control {
+    border-radius: 0px;
+}
+
+.form-group {
+    padding: 0px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.nofloat {
+    clear: both;
+}
+
+#manage {
     color: orangered;
+}
+
+#addNew {
+    margin: 5px auto 5px 10px;
+    height: 34px;
+    line-height: 12px;
 }
 
 

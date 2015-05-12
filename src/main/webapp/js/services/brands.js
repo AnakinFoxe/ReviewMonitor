@@ -15,7 +15,7 @@ app.factory('brands', ['$http', 'CacheFactory', function($http, CacheFactory) {
         });
     }
 
-    return $http.get('http://localhost:8080/webapi/brand/', {cache: brandsCache})
+    return $http.get('http://localhost:8080/webapi/rm/brand/', {cache: brandsCache})
         .success(function(data) {
             return data;
         })
