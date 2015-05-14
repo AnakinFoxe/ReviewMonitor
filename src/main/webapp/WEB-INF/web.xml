@@ -23,7 +23,7 @@
        </servlet>
        <servlet-mapping>
               <servlet-name>ReviewMonitorServlet</servlet-name>
-              <url-pattern>/webapi/rm/*</url-pattern>
+              <url-pattern>/webapi/*</url-pattern>
        </servlet-mapping>
 
 

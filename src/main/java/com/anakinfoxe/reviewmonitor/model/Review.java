@@ -36,6 +36,8 @@ public class Review {
 
     private Float helpRatio;
 
+    private String modelNum;    // from product
+
     @JsonIgnore
     @ManyToOne
     private Product product;    // owner of OneToMany
@@ -101,6 +103,14 @@ public class Review {
 
     public void setHelpRatio(Float helpRatio) {
         this.helpRatio = helpRatio;
+    }
+
+    public String getModelNum() {
+        return modelNum;
+    }
+
+    public void setModelNum(String modelNum) {
+        this.modelNum = modelNum;
     }
 
     public Product getProduct() {

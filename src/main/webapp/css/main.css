@@ -78,7 +78,9 @@ hr {
 
 .model {
     padding-left: 2%;
-    width: 10%;
+    width: 12%;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .rating {
@@ -88,6 +90,8 @@ hr {
 
 .title {
     width: 66%;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .date {

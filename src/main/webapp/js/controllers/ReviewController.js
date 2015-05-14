@@ -8,7 +8,7 @@ app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function
     $scope.maxSize = 10;
     $scope.displayReviews = [];
 
-    reviews.success(function(data) {
+    reviews.getReviews().success(function(data) {
         $scope.reviews = data;
         $scope.updatedReviews = data;
 
@@ -79,6 +79,8 @@ app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function
             var begin = (($scope.currentPage - 1) * $scope.pageSize);
             var end = begin + $scope.pageSize;
             $scope.displayReviews = $scope.updatedReviews.slice(begin, end);
+
+            console.log($scope.displayReviews);
         }
     });
 

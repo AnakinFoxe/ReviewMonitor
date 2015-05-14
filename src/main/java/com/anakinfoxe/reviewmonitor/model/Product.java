@@ -40,7 +40,7 @@ public class Product {
     private Date updateDate;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private transient List<Review> reviews = new ArrayList<>();
 
     @JsonIgnore

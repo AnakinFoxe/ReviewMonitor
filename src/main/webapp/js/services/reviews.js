@@ -14,11 +14,15 @@ app.factory('reviews', ['$http', '$routeParams', 'CacheFactory', function($http,
         });
     }
 
-    return $http.get('http://localhost:8080/webapi/rm/review/brand/' + $routeParams.id, {cache: reviewsCache})
-        .success(function(data) {
-            return data;
-        })
-        .error(function(data) {
-            return data;
-        });
+    return {
+        getReviews: function() {
+            return $http.get('/rm/webapi/review/brand/' + $routeParams.id, {cache: reviewsCache})
+                .success(function (data) {
+                    return data;
+                })
+                .error(function (data) {
+                    return data;
+                });
+        }
+    }
 }]);

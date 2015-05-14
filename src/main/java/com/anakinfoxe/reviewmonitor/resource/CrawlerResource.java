@@ -22,7 +22,7 @@ public class CrawlerResource {
     private final int MAX_ALLOWED_CRAWLER_ = 5;
 
     // TODO: might remove this from code
-    private String key_ = "WhatAGoodDay!!?";
+    private String key_ = "WhatAGoodDay!!";
 
 
     @Path("{brand}")

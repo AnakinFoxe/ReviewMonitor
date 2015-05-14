@@ -168,6 +168,11 @@ public class CrawlerServiceImpl implements CrawlerService {
                 review.setProduct(savedProduct);
                 // update brand mapping
                 review.setBrand(brandObj);
+                // update modelNum
+                if (savedProduct.getModelNum() == null)
+                    review.setModelNum("Model # empty");
+                else
+                    review.setModelNum(savedProduct.getModelNum());
 
                 reviewRepository.save(review);
             }
