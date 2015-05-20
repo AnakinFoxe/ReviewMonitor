@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -146,19 +143,23 @@ public class CrawlerServiceImpl implements CrawlerService {
                     + " reivews for product " + productId);
         }
 
+        // load all the saved reviews of this brand and convert into set
+        List<Review> savedReviews = reviewRepository.loadAllByBrand(brandObj);
+        Set<String> savedReviewsSet = new HashSet<>();
+        for (Review review : savedReviews)
+            savedReviewsSet.add(review.getName());
+
         // update database
         for (String productId : allReviews.keySet()) {
             // get saved reviews from database
             Product savedProduct = productRepository.loadByProductId(productId);
-            List<Review> savedReviews = reviewRepository.loadAllByProduct(savedProduct);
 
             // get lately obtained reviews from results
             Map<String, Review> productReviews = allReviews.get(productId);
 
-            // Remove already saved reviews
-            for (Review review : savedReviews) {
-                String reviewName = review.getName();
-                if (productReviews.containsKey(reviewName))
+            // Remove already saved reviews (optimized a little bit)
+            for (String reviewName : productReviews.keySet()) {
+                if (savedReviewsSet.contains(reviewName))
                     productReviews.remove(reviewName);
             }
 
