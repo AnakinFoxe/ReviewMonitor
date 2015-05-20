@@ -1,6 +1,7 @@
 import com.anakinfoxe.reviewmonitor.model.Node;
 import com.anakinfoxe.reviewmonitor.model.Product;
 import com.anakinfoxe.reviewmonitor.model.Review;
+import com.anakinfoxe.reviewmonitor.util.ContentCrawler;
 import com.anakinfoxe.reviewmonitor.util.NodeCrawler;
 import com.anakinfoxe.reviewmonitor.util.ProductCrawler;
 import com.anakinfoxe.reviewmonitor.util.ReviewCrawler;
@@ -175,14 +176,67 @@ public class TestCrawler {
         return true;
     }
 
+    private static Map<String, String> getContents() {
+        Map<String, String> contents = new HashMap<>();
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("src/test/ContentList.txt"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.contains(",")) {
+                    String[] items = line.trim().split(",");
+                    contents.put(items[0], items[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return contents;
+    }
+
+    private static boolean testContentCrawler() {
+        // construct test list
+        Map<String, String> contents = getContents();
+
+        // instantiate ContentCrawler
+        ContentCrawler cc = new ContentCrawler();
+
+        int correct = 0;
+        for (String url : contents.keySet()) {
+            String productId = cc.crawl(url);
+            if (contents.get(url).equals(productId)) {
+                correct++;
+            }
+            else {
+                System.out.print("Product " + contents.get(url) + " reviews obtained error. ");
+                System.out.println("Expected: " + contents.get(url)
+                        + " Obtained: " + productId);
+            }
+
+        }
+
+        if (correct != contents.size()) {
+            System.out.println("Content List Obtained Error.");
+            System.out.println("correct = " + correct + " total = " + contents.size());
+            return false;
+        }
+
+
+        return true;
+    }
+
     public static void main(String[] args) {
-        if (testNodeCrawler() == true)
-            System.out.println("NodeCrawler passed");
+//        if (testNodeCrawler() == true)
+//            System.out.println("NodeCrawler passed");
+//
+//        if (testProductCrawler("soundbot", "2335752011", 126) == true)
+//            System.out.println("ProductCrawler passed");
+//
+//        if (testReviewCrawler() == true)
+//            System.out.println("ReviewCrawler passed");
 
-        if (testProductCrawler("soundbot", "2335752011", 126) == true)
-            System.out.println("ProductCrawler passed");
-
-        if (testReviewCrawler() == true)
-            System.out.println("ReviewCrawler passed");
+        if (testContentCrawler() == true)
+            System.out.println("ContentCrawler passed");
     }
 }

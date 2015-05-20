@@ -7,6 +7,7 @@ import com.anakinfoxe.reviewmonitor.model.Review;
 import com.anakinfoxe.reviewmonitor.repository.BrandRepository;
 import com.anakinfoxe.reviewmonitor.repository.ProductRepository;
 import com.anakinfoxe.reviewmonitor.repository.ReviewRepository;
+import com.anakinfoxe.reviewmonitor.thread.ContentThread;
 import com.anakinfoxe.reviewmonitor.thread.ProductThread;
 import com.anakinfoxe.reviewmonitor.thread.ReviewThread;
 import com.anakinfoxe.reviewmonitor.util.NodeCrawler;
@@ -35,8 +36,10 @@ public class CrawlerServiceImpl implements CrawlerService {
 
     private final int MAX_PRODUCT_THREAD_           = 4;
     private final int MAX_REVIEW_THREAD_            = 8;
-    private final int MAX_AWAIT_HOURS_4_PRODUCT_    = 5;
-    private final int MAX_AWAIT_HOURS_4_REVIEW_     = 16;
+    private final int MAX_CONTENT_THREAD_           = 8;
+    private final int MAX_AWAIT_HOURS_4_PRODUCT_    = 4;
+    private final int MAX_AWAIT_HOURS_4_REVIEW_     = 4;
+    private final int MAX_AWAIT_HOURS_4_CONTENT_    = 4;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public int crawlBrand(String brand) {
@@ -149,6 +152,11 @@ public class CrawlerServiceImpl implements CrawlerService {
         for (Review review : savedReviews)
             savedReviewsSet.add(review.getName());
 
+        // to be saved reviews
+        Map<String, Review> reviewsToBeSaved = new HashMap<>();
+        // need to resolve (duplicate)
+        Map<String, Review> reviewsNeedToResolve = new HashMap<>();
+
         // update database
         for (String productId : allReviews.keySet()) {
             // get saved reviews from database
@@ -175,9 +183,61 @@ public class CrawlerServiceImpl implements CrawlerService {
                 else
                     review.setModelNum(savedProduct.getModelNum());
 
-                reviewRepository.save(review);
+                if (!reviewsToBeSaved.containsKey(review.getName()))
+                    reviewsToBeSaved.put(review.getName(), review);
+                else
+                    reviewsNeedToResolve.put(review.getName(), review);
             }
         }
+
+        // resolve duplicate
+        // 1. crawl review content page
+        ExecutorService contentExecutor
+                = Executors.newFixedThreadPool(MAX_CONTENT_THREAD_);
+        Map<String, Future<String>> futureProductId = new HashMap<>();
+        for (String reviewName : reviewsNeedToResolve.keySet()) {
+            futureProductId.put(reviewName, contentExecutor.submit(
+                    new ContentThread(reviewsNeedToResolve.get(reviewName).getPermalink())));
+        }
+
+        // 2. shutdown executor once all the tasks are done
+        contentExecutor.shutdown();
+        try {
+            contentExecutor.awaitTermination(MAX_AWAIT_HOURS_4_CONTENT_, TimeUnit.HOURS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // 3. update correct product info for the review
+        for (String reviewName : futureProductId.keySet()) {
+            try {
+                String productId = futureProductId.get(reviewName).get();
+
+                // get saved reviews from database
+                Product savedProduct = productRepository.loadByProductId(productId);
+
+                Review review = reviewsToBeSaved.get(reviewName);
+                // update correct product
+                review.setProduct(savedProduct);
+                // update correct modelNum
+                if (savedProduct == null)
+                    review.setModelNum("Outdated Model");
+                else if (savedProduct.getModelNum() == null)
+                    review.setModelNum("Model # empty");
+                else
+                    review.setModelNum(savedProduct.getModelNum());
+
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // save to database
+        for (Review review : reviewsToBeSaved.values())
+            reviewRepository.save(review);
 
         return allReviews.size();   // number of products with reviews crawled
     }
