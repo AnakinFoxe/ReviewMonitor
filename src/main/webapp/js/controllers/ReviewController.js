@@ -4,7 +4,7 @@
 app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function($scope, reviews, $modal, _) {
 
     $scope.currentPage = 1;
-    $scope.pageSize = 10;
+    $scope.pageSize = 20;
     $scope.maxSize = 10;
     $scope.displayReviews = [];
 
@@ -21,8 +21,8 @@ app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function
 
         // filters
         $scope.filters = {
-            filterDays: 30,
-            filterRates: [true, true, false, false, false]
+            filterDays: 1,
+            filterRates: [true, true, true, false, false]
         };
 
         /** Pagination **/

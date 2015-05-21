@@ -16,7 +16,7 @@ app.factory('reviews', ['$http', '$routeParams', 'CacheFactory', function($http,
 
     return {
         getReviews: function() {
-            return $http.get('/webapi/review/brand/' + $routeParams.id, {cache: reviewsCache})
+            return $http.get('/rm/webapi/review/brand/' + $routeParams.id, {cache: reviewsCache})
                 .success(function (data) {
                     return data;
                 })

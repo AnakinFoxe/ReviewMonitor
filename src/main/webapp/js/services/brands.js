@@ -15,7 +15,7 @@ app.factory('brands', ['$http', 'CacheFactory', function($http, CacheFactory) {
         });
     }
 
-    return $http.get('/webapi/brand/', {cache: brandsCache})
+    return $http.get('/rm/webapi/brand/', {cache: brandsCache})
         .success(function(data) {
             return data;
         })
