@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -42,7 +43,7 @@ public class CrawlerServiceImpl implements CrawlerService {
     private final int MAX_AWAIT_HOURS_4_CONTENT_    = 4;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public int crawlBrand(String brand) {
+    public int crawlBrand(String brand) throws Exception {
         // a little pre-processing
         brand = brand.toLowerCase().trim();
 
@@ -166,10 +167,13 @@ public class CrawlerServiceImpl implements CrawlerService {
             Map<String, Review> productReviews = allReviews.get(productId);
 
             // Remove already saved reviews (optimized a little bit)
+            Set<String> duplicates = new HashSet<>();
             for (String reviewName : productReviews.keySet()) {
                 if (savedReviewsSet.contains(reviewName))
-                    productReviews.remove(reviewName);
+                    duplicates.add(reviewName);
             }
+            for (String reviewName : duplicates)
+                productReviews.remove(reviewName);
 
             // insert rest (new) reviews
             for (Review review : productReviews.values()) {

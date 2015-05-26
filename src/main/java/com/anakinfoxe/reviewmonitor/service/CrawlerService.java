@@ -5,7 +5,7 @@ package com.anakinfoxe.reviewmonitor.service;
  */
 public interface CrawlerService {
 
-    int crawlBrand(String brand);
+    int crawlBrand(String brand) throws Exception;
 
     void crawlProduct(String productId);
 }

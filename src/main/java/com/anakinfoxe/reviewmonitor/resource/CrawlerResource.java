@@ -19,7 +19,7 @@ public class CrawlerResource {
 
     private static Map<String, Crawler> crawlerPool_ = new HashMap<>();
 
-    private final int MAX_ALLOWED_CRAWLER_ = 5;
+    private final int MAX_ALLOWED_CRAWLER_ = 20;
 
     // TODO: might remove this from code
     private String key_ = "WhatAGoodDay!!";
@@ -35,7 +35,7 @@ public class CrawlerResource {
             return "Key is either not present or not correct.";
 
         // TODO: to be honest, this is a risky implementation
-        final String b_ = brand;
+        final String b_ = brand.toLowerCase();
         new Thread(new Runnable() {
 
             @Override
@@ -74,7 +74,19 @@ public class CrawlerResource {
                         // start crawling if needed
                         if (needCrawling(brand)) {
                             System.out.println(brand + " crawler is crawling!!!");
-                            crawlerService.crawlBrand(brand);
+
+                            try {
+                                crawlerService.crawlBrand(brand);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+
+                                // for any exception at all, stop the crawler
+                                stopCrawling(brand);
+                                stopRunning(brand);
+                                cleanup(brand);
+                                System.out.println(brand + " crawler is forced to stop. [" +
+                                    e.getMessage() + "]");
+                            }
                         }
 
                         ++cnt;
