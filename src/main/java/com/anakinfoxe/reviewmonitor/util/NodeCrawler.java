@@ -71,7 +71,7 @@ public class NodeCrawler {
 
                 return nodeObjs;
             } catch (IOException e) {
-                System.out.println("IOException (NodePage). Retrying "
+                System.out.println("IOException (NodeCrawler). Retrying "
                         + retry + "/" + maxRetries_
                         + ". " + e.getMessage());
 

@@ -7,16 +7,16 @@ import com.anakinfoxe.reviewmonitor.model.Review;
 import com.anakinfoxe.reviewmonitor.repository.BrandRepository;
 import com.anakinfoxe.reviewmonitor.repository.ProductRepository;
 import com.anakinfoxe.reviewmonitor.repository.ReviewRepository;
-import com.anakinfoxe.reviewmonitor.thread.ContentThread;
+import com.anakinfoxe.reviewmonitor.thread.DupResolveThread;
 import com.anakinfoxe.reviewmonitor.thread.ProductThread;
 import com.anakinfoxe.reviewmonitor.thread.ReviewThread;
+import com.anakinfoxe.reviewmonitor.thread.StatusThread;
 import com.anakinfoxe.reviewmonitor.util.NodeCrawler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -37,21 +37,32 @@ public class CrawlerServiceImpl implements CrawlerService {
 
     private final int MAX_PRODUCT_THREAD_           = 4;
     private final int MAX_REVIEW_THREAD_            = 8;
-    private final int MAX_CONTENT_THREAD_           = 8;
-    private final int MAX_AWAIT_HOURS_4_PRODUCT_    = 4;
+    private final int MAX_RESOLVER_THREAD_          = 8;
+    private final int MAX_STATUS_THREAD_            = 8;
+
+    private final int MAX_AWAIT_HOURS_4_PRODUCT_    = 2;
     private final int MAX_AWAIT_HOURS_4_REVIEW_     = 4;
-    private final int MAX_AWAIT_HOURS_4_CONTENT_    = 4;
+    private final int MAX_AWAIT_HOURS_4_RESOLVER_   = 4;
+    private final int MAX_AWAIT_HOURS_4_STATUS_     = 4;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public int crawlBrand(String brand) throws Exception {
         // a little pre-processing
         brand = brand.toLowerCase().trim();
 
+        /**
+         * Update Node id information
+         */
+
         // get latest node info every time
         NodeCrawler nc = new NodeCrawler();
         Map<String, Node> nodes = nc.crawl();
 
         System.out.println("Crawled " + nodes.size() + " nodes");
+
+        /**
+         * Obtain all the products of this brand
+         */
 
         // send out product crawler for each node id
         ExecutorService prodcutExecutor
@@ -93,6 +104,10 @@ public class CrawlerServiceImpl implements CrawlerService {
                 brandObj = brandRepository.save(new Brand(brand));
             }
         }
+
+        /**
+         * Crawl reviews of the products whose number of reviews were changed
+         */
 
         // send out review crawler for each product
         ExecutorService reviewExecutor
@@ -147,18 +162,31 @@ public class CrawlerServiceImpl implements CrawlerService {
                     + " reivews for product " + productId);
         }
 
+        /**
+         * Remove reviews which already in the database from the crawling result list.
+         * Also keep track of duplicated reviews in the crawling result list.
+         */
+
         // load all the saved reviews of this brand and convert into set
         List<Review> savedReviews = reviewRepository.loadAllByBrand(brandObj);
         Set<String> savedReviewsSet = new HashSet<>();
-        for (Review review : savedReviews)
+        // to be monitored reviews (status needs to be update)
+        Map<String, Review> monitoredReviews = new HashMap<>();
+        for (Review review : savedReviews) {
+            // construct set for reviews in database
             savedReviewsSet.add(review.getName());
+
+            // record reviews to be monitored
+            if (review.getStatus().equals(Review.Status.REPLIED))
+                monitoredReviews.put(review.getName(), review);
+        }
 
         // to be saved reviews
         Map<String, Review> reviewsToBeSaved = new HashMap<>();
         // need to resolve (duplicate)
         Map<String, Review> reviewsNeedToResolve = new HashMap<>();
 
-        // update database
+        // update review information and identify duplicates
         for (String productId : allReviews.keySet()) {
             // get saved reviews from database
             Product savedProduct = productRepository.loadByProductId(productId);
@@ -177,15 +205,19 @@ public class CrawlerServiceImpl implements CrawlerService {
 
             // insert rest (new) reviews
             for (Review review : productReviews.values()) {
-                // update product mapping
+                // set product mapping
                 review.setProduct(savedProduct);
-                // update brand mapping
+                // set brand mapping
                 review.setBrand(brandObj);
-                // update modelNum
+                // set modelNum
                 if (savedProduct.getModelNum() == null)
                     review.setModelNum("Model # empty");
                 else
                     review.setModelNum(savedProduct.getModelNum());
+                // set crawled times
+                review.setCrawledTimes(0);
+                // set status
+                review.setStatus(Review.Status.NEEDS_REPLY);
 
                 if (!reviewsToBeSaved.containsKey(review.getName()))
                     reviewsToBeSaved.put(review.getName(), review);
@@ -194,20 +226,23 @@ public class CrawlerServiceImpl implements CrawlerService {
             }
         }
 
-        // resolve duplicate
+        /**
+         * Resolve duplicated reviews in the crawling result list
+         */
+
         // 1. crawl review content page
-        ExecutorService contentExecutor
-                = Executors.newFixedThreadPool(MAX_CONTENT_THREAD_);
+        ExecutorService resolverExecutor
+                = Executors.newFixedThreadPool(MAX_RESOLVER_THREAD_);
         Map<String, Future<String>> futureProductId = new HashMap<>();
         for (String reviewName : reviewsNeedToResolve.keySet()) {
-            futureProductId.put(reviewName, contentExecutor.submit(
-                    new ContentThread(reviewsNeedToResolve.get(reviewName).getPermalink())));
+            futureProductId.put(reviewName, resolverExecutor.submit(
+                    new DupResolveThread(reviewsNeedToResolve.get(reviewName).getPermalink())));
         }
 
         // 2. shutdown executor once all the tasks are done
-        contentExecutor.shutdown();
+        resolverExecutor.shutdown();
         try {
-            contentExecutor.awaitTermination(MAX_AWAIT_HOURS_4_CONTENT_, TimeUnit.HOURS);
+            resolverExecutor.awaitTermination(MAX_AWAIT_HOURS_4_RESOLVER_, TimeUnit.HOURS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -239,11 +274,68 @@ public class CrawlerServiceImpl implements CrawlerService {
             }
         }
 
-        // save to database
+        // save new reviews to database
         for (Review review : reviewsToBeSaved.values())
             reviewRepository.save(review);
 
-        return allReviews.size();   // number of products with reviews crawled
+        /**
+         * Track review status
+         */
+        // include all new reviews and reviews in "REPLIED" status
+        monitoredReviews.putAll(reviewsToBeSaved);
+
+        // monitored user names (Customer Service names)
+        Set<String> monitoredUsers = new HashSet<>();
+        monitoredUsers.add("Support Volcus");
+        monitoredUsers.add("Support Customer Service");
+
+        ExecutorService statusExecutor
+                = Executors.newFixedThreadPool(MAX_STATUS_THREAD_);
+        Map<String, Future<Review.Status>> futureStatus = new HashMap<>();
+        for (Review review : monitoredReviews.values()) {
+            futureStatus.put(review.getName(),
+                    statusExecutor.submit(new StatusThread(review.getPermalink(), monitoredUsers)));
+        }
+
+        // shutdown executor
+        statusExecutor.shutdown();
+        try {
+            statusExecutor.awaitTermination(MAX_AWAIT_HOURS_4_STATUS_, TimeUnit.HOURS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // update status
+        for (String reviewName : futureStatus.keySet()) {
+            try {
+                Review.Status status = futureStatus.get(reviewName).get();
+
+                Review review = monitoredReviews.get(reviewName);
+                // update status to the review
+                review.setStatus(status);
+                // update crawled number
+                if (status.equals(Review.Status.REPLIED)) {
+                    review.setCrawledTimes(review.getCrawledTimes() + 1);
+                } else {
+                    review.setCrawledTimes(0);  // no longer needs to be crawled
+                }
+
+                // has been crawled too many times
+                if (review.getCrawledTimes() >= 180)
+                    review.setStatus(Review.Status.OUTDATED);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // update to database
+        for (Review review : monitoredReviews.values())
+            reviewRepository.saveOrUpdate(review);
+
+        return reviewsToBeSaved.size();   // number of products with reviews crawled
     }
 
     @Override

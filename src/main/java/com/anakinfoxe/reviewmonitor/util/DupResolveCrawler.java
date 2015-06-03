@@ -1,6 +1,5 @@
 package com.anakinfoxe.reviewmonitor.util;
 
-import com.anakinfoxe.reviewmonitor.model.Review;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,11 +8,11 @@ import java.io.IOException;
 
 /**
  * This crawler targets to crawl the review page through review's permalink.
- * Information like the review item, comments are going to be crawled.
+ * It is intend to determine the product id relates to this review.
  *
  * Created by xing on 5/19/15.
  */
-public class ContentCrawler {
+public class DupResolveCrawler {
 
     // CSS Query string
     private final String Q_PRODUCT_        = "span.asinReviewsSummary";
@@ -38,7 +37,7 @@ public class ContentCrawler {
                     return product.attr("name");
 
             } catch (IOException e) {
-                System.out.println("IOException (ReviewContentPage). Retrying "
+                System.out.println("IOException (DupResolveCrawler). Retrying "
                         + retry + "/" + maxRetries_
                         + ". " + e.getMessage());
 

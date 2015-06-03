@@ -3,6 +3,14 @@
  */
 app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function($scope, reviews, $modal, _) {
 
+    $scope.color = function(status) {
+        if (status == 'REPLIED') {
+            return {"background-color": "#fffff3"};
+        } else {
+            return {"background-color": "#fff"};
+        }
+    }
+
     $scope.currentPage = 1;
     $scope.pageSize = 20;
     $scope.maxSize = 10;

@@ -8,7 +8,7 @@
 </div>
 
 <div class="container">
-    <div class="left item review" ng-repeat="review in displayReviews">
+    <div class="left item review" ng-repeat="review in displayReviews" ng-style="color(review.status)">
         <span class="model">{{ review.modelNum }}</span>
         <span class="rating">{{ review.rate }} Stars</span>
         <a href="{{ review.permalink }}" target="_blank">

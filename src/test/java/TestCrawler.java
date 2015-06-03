@@ -1,16 +1,15 @@
 import com.anakinfoxe.reviewmonitor.model.Node;
 import com.anakinfoxe.reviewmonitor.model.Product;
 import com.anakinfoxe.reviewmonitor.model.Review;
-import com.anakinfoxe.reviewmonitor.util.ContentCrawler;
-import com.anakinfoxe.reviewmonitor.util.NodeCrawler;
-import com.anakinfoxe.reviewmonitor.util.ProductCrawler;
-import com.anakinfoxe.reviewmonitor.util.ReviewCrawler;
+import com.anakinfoxe.reviewmonitor.util.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by xing on 3/1/15.
@@ -176,11 +175,11 @@ public class TestCrawler {
         return true;
     }
 
-    private static Map<String, String> getContents() {
+    private static Map<String, String> getDupliates() {
         Map<String, String> contents = new HashMap<>();
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/test/ContentList.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("src/test/DupResolveList.txt"));
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.contains(",")) {
@@ -195,12 +194,12 @@ public class TestCrawler {
         return contents;
     }
 
-    private static boolean testContentCrawler() {
+    private static boolean testDupResolveCrawler() {
         // construct test list
-        Map<String, String> contents = getContents();
+        Map<String, String> contents = getDupliates();
 
-        // instantiate ContentCrawler
-        ContentCrawler cc = new ContentCrawler();
+        // instantiate DupResolveCrawler
+        DupResolveCrawler cc = new DupResolveCrawler();
 
         int correct = 0;
         for (String url : contents.keySet()) {
@@ -226,17 +225,68 @@ public class TestCrawler {
         return true;
     }
 
-    public static void main(String[] args) {
-//        if (testNodeCrawler() == true)
-//            System.out.println("NodeCrawler passed");
-//
-//        if (testProductCrawler("soundbot", "2335752011", 126) == true)
-//            System.out.println("ProductCrawler passed");
-//
-//        if (testReviewCrawler() == true)
-//            System.out.println("ReviewCrawler passed");
+    private static Map<String, Review.Status> getStatus() {
+        Map<String, Review.Status> status = new HashMap<>();
 
-        if (testContentCrawler() == true)
-            System.out.println("ContentCrawler passed");
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("src/test/StatusList.txt"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.contains(",")) {
+                    String[] items = line.trim().split(",");
+                    int s = Integer.parseInt(items[1]);
+                    status.put(items[0], Review.Status.values()[s]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return status;
+    }
+
+    private static boolean testStatusCrawler() {
+        // construct test list
+        Map<String, Review.Status> status = getStatus();
+
+        // instantiate StatusCrawler
+        StatusCrawler sc = new StatusCrawler();
+
+        // Customer Service names
+        Set<String> monitored = new HashSet<>();
+        monitored.add("Support Volcus");
+        monitored.add("Support Customer Service");
+
+        int correct = 0;
+        for (String url : status.keySet()) {
+            Review.Status obtainedStatus = sc.crawl(url, monitored);
+
+            if (obtainedStatus.equals(status.get(url)))
+                correct++;
+
+        }
+
+        if (correct != status.size())
+            return false;
+        else
+            return true;
+    }
+
+
+    public static void main(String[] args) {
+        if (testNodeCrawler())
+            System.out.println("NodeCrawler passed");
+
+        if (testProductCrawler("soundbot", "2335752011", 126))
+            System.out.println("ProductCrawler passed");
+
+        if (testReviewCrawler())
+            System.out.println("ReviewCrawler passed");
+
+        if (testDupResolveCrawler())
+            System.out.println("DupResolveCrawler passed");
+
+        if (testStatusCrawler())
+            System.out.println("StatusCrawler passed");
     }
 }

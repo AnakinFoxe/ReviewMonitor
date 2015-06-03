@@ -93,7 +93,7 @@ public class ProductCrawler {
 
                 return productObj;
             } catch (IOException e) {
-                System.out.println("IOException (ProductPage). Retrying "
+                System.out.println("IOException (ProductCrawler.ProductPage). Retrying "
                         + retry + "/" + maxRetries_
                         + ". " + e.getMessage());
 
@@ -136,7 +136,7 @@ public class ProductCrawler {
 
                 return productObjs;
             } catch (IOException e) {
-                System.out.println("IOException (ProductSearch). Retrying "
+                System.out.println("IOException (ProductCrawler.ProductSearch). Retrying "
                         + retry + "/" + maxRetries_
                         + ". " + e.getMessage()
                         + ": " + pageUrl);

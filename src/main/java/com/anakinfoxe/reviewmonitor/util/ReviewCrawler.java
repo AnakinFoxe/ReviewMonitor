@@ -155,7 +155,7 @@ public class ReviewCrawler {
 
                 return reviewObjs;
             } catch (IOException e) {
-                System.out.println("IOException (ReviewPage). Retrying "
+                System.out.println("IOException (ReviewCrawler). Retrying "
                         + retry + "/" + maxRetries_
                         + ". " + e.getMessage());
 

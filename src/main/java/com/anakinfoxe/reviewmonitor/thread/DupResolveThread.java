@@ -1,24 +1,24 @@
 package com.anakinfoxe.reviewmonitor.thread;
 
-import com.anakinfoxe.reviewmonitor.util.ContentCrawler;
+import com.anakinfoxe.reviewmonitor.util.DupResolveCrawler;
 
 import java.util.concurrent.Callable;
 
 /**
  * Created by xing on 5/20/15.
  */
-public class ContentThread implements Callable<String> {
+public class DupResolveThread implements Callable<String> {
 
     private final String permalink_;
 
-    public ContentThread(String permalink) {
+    public DupResolveThread(String permalink) {
         this.permalink_ = permalink;
     }
 
 
     @Override
     public String call() throws Exception {
-        ContentCrawler cc = new ContentCrawler();
+        DupResolveCrawler cc = new DupResolveCrawler();
         return cc.crawl(permalink_);
     }
 }
