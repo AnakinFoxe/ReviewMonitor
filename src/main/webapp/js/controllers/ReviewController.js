@@ -5,9 +5,9 @@ app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function
 
     $scope.color = function(status) {
         if (status == 'REPLIED') {
-            return {"background-color": "#fffff3"};
+            return {"background-color": "#FFDC00"};
         } else {
-            return {"background-color": "#fff"};
+            return {"background-color": "#FFF"};
         }
     }
 
@@ -24,7 +24,7 @@ app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function
         // sorting
         $scope.sorting = {
             latest: true,
-            lowest: true
+            rating: -1
         };
 
         // filters
@@ -63,13 +63,17 @@ app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function
     };
 
     // Make the settings work
-    $scope.$watch('sorting.latest + sorting.lowest + filters.filterDays + filters.filterRates', function() {
+    $scope.$watch('sorting.latest + sorting.rating + filters.filterDays + filters.filterRates', function() {
         if ($scope.reviews) {
              // first apply filter
              // by date
+             // convert to GMT first, and offset another 19 hours because
+             // Amazon review starts at 5AM-GMT everyday
+            //var targetDayValue = Date.now() - (new Date()).getTimezoneOffset() * 60 * 1000
+            //    - ($scope.filters.filterDays * 24 + 19) * 3600 * 1000;
             var targetDayValue = Date.now() - $scope.filters.filterDays * 24 * 3600 * 1000;
             $scope.updatedReviews = _.filter($scope.reviews, function(review) {
-                return review.date >= targetDayValue;
+                return review.date > targetDayValue;
             })
             // by rate
             $scope.updatedReviews = _.filter($scope.updatedReviews, function(review) {
@@ -81,13 +85,14 @@ app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function
             })
 
             // then sort the rest reviews
-            $scope.updatedReviews = sorts($scope.sorting.latest, $scope.sorting.lowest, $scope.updatedReviews, _);
+            $scope.updatedReviews = sorts($scope.sorting.latest, $scope.sorting.rating, $scope.updatedReviews, _);
 
             // update display
             var begin = (($scope.currentPage - 1) * $scope.pageSize);
             var end = begin + $scope.pageSize;
             $scope.displayReviews = $scope.updatedReviews.slice(begin, end);
 
+            console.log(Date.now() + " => " + targetDayValue);
             console.log($scope.displayReviews);
         }
     });
@@ -95,27 +100,29 @@ app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function
 }]);
 
 
-var sorts = function(latest, lowest, reviews, _) {
+var sorts = function(latest, rating, reviews, _) {
     var updatedReviews;
-    if (latest) {
+    if (latest) {   // latest first
         updatedReviews = _.sortBy(reviews, function(review) {
             return -review.date;
         });
-    } else {
+    } else {    // oldest first
         updatedReviews = _.sortBy(reviews, function(review) {
             return review.date;
         });
     }
 
-    if (lowest) {
+    if (rating == -1) { // lowest first
         updatedReviews = _.sortBy(updatedReviews, function(review) {
             return review.rate;
         });
-    } else {
+    }
+    else if (rating == 1) { // highest first
         updatedReviews = _.sortBy(updatedReviews, function(review) {
             return -review.rate;
         });
     }
+    // else: off
 
     return updatedReviews;
 };

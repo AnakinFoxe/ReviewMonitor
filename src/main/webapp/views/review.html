@@ -1,10 +1,15 @@
 
 <div class="left btn-group">
-    <label class="btn" ng-model="sorting.latest" btn-checkbox><span>Latest first</span></label>
-    <label class="btn" ng-model="sorting.lowest" btn-checkbox><span>Lowest first</span></label>
+    <label class="btn btn-rating" ng-model="sorting.rating" btn-radio="-1"><span>Lowest</span></label>
+    <label class="btn btn-rating" ng-model="sorting.rating" btn-radio="0"><span>Off</span></label>
+    <label class="btn btn-rating" ng-model="sorting.rating" btn-radio="1"><span>Highest</span></label>
 </div>
 <div class="left btn-group btn-single">
-    <button class="btn" ng-click="open()"><span>Filter</span></button>
+    <label class="btn" ng-model="sorting.latest" btn-checkbox><span>Latest first</span></label>
+    <!--<label class="btn" ng-model="sorting.lowest" btn-checkbox><span>Lowest first</span></label>-->
+</div>
+<div class="left btn-group btn-single">
+    <button class="btn btn-filter" ng-click="open()"><span>Filter</span></button>
 </div>
 
 <div class="container">

@@ -136,6 +136,15 @@ hr {
     margin: 0 0 0 20px;
 }
 
+.btn-rating {
+    width: 70px;
+}
+
+.btn-filter {
+    color: #fff;
+    background-color: #428bca;
+}
+
 .btn-ok {
     color: #fff;
     background-color: #428bca;
