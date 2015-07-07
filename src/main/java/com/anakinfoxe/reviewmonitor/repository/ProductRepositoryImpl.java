@@ -89,4 +89,13 @@ public class ProductRepositoryImpl implements ProductRepository {
             return null;
         }
     }
+
+    @Override
+    public int deleteAllByBrand(Brand brand) {
+        String hql = "delete from Product g where g.brand = :brand";
+        Query query = em.createQuery(hql);
+        query.setParameter("brand", brand);
+
+        return query.executeUpdate();
+    }
 }

@@ -16,4 +16,6 @@ public interface BrandRepository {
     Brand loadByName(String name);
 
     List<Brand> loadAll();
+
+    int deleteById(Long id);
 }

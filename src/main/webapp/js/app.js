@@ -6,7 +6,8 @@ underscore.factory('_', function() {
    return window._;
 });
 
-var app = angular.module('ReviewMonitor', ['ngRoute', 'ui.bootstrap', 'angular-cache', 'underscore']);
+var app = angular.module('ReviewMonitor',
+    ['ngRoute', 'ui.bootstrap', 'angular-cache', 'underscore', 'filters-module']);
 
 
 app.config(function($routeProvider, CacheFactoryProvider) {

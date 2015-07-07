@@ -4,10 +4,7 @@ import com.anakinfoxe.reviewmonitor.model.Review;
 import com.anakinfoxe.reviewmonitor.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -25,5 +22,13 @@ public class ReviewResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Review> getAll(@PathParam("brandId") Long brandId) {
         return reviewService.loadAllByBrandId(brandId);
+    }
+
+
+    @Path("/replied/{reviewId}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public void changeReviewToReplied(@PathParam("reviewId") Long reviewId) {
+        reviewService.changeReviewToReplied(reviewId);
     }
 }

@@ -3,21 +3,49 @@
 </div>
 <div class="modal-body">
     <div class="btn-group">
-        <label class="btn" ng-model="selected.filterDays" btn-radio="1">Last Day</label>
-        <label class="btn" ng-model="selected.filterDays" btn-radio="3">Last 3 Days</label>
-        <label class="btn" ng-model="selected.filterDays" btn-radio="7">Last Week</label>
-        <label class="btn" ng-model="selected.filterDays" btn-radio="30">Last Month</label>
-        <label class="btn" ng-model="selected.filterDays" btn-radio="3650">All</label>
+        <div class="col-md-6">
+            <p class="input-group">
+                <input type="text" class="form-control"
+                       datepicker-popup="{{format}}" ng-model="selected.filterDateStart" is-open="startOpened"
+                       min-date="minDate" max-date="maxDate" show-button-bar="false" show-weeks="false"
+                       ng-required="true" close-text="Close" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="openStart($event)">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>
+            </p>
+        </div>
+        <div class="col-md-6">
+            <p class="input-group">
+                <input type="text" class="form-control"
+                       datepicker-popup="{{format}}" ng-model="selected.filterDateEnd" is-open="endOpened"
+                       min-date="minDate" max-date="maxDate"show-button-bar="false" show-weeks="false"
+                       ng-required="true" close-text="Close" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="openEnd($event)">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>
+            </p>
+        </div>
     </div>
-    <div class="btn-group">
-        <label class="btn" ng-model="selected.filterRates[0]" btn-checkbox>1 Star</label>
-        <label class="btn" ng-model="selected.filterRates[1]" btn-checkbox>2 Stars</label>
-        <label class="btn" ng-model="selected.filterRates[2]" btn-checkbox>3 Stars</label>
-        <label class="btn" ng-model="selected.filterRates[3]" btn-checkbox>4 Stars</label>
-        <label class="btn" ng-model="selected.filterRates[4]" btn-checkbox>5 Stars</label>
+    <div class="btn-single">
+        <label class="btn btn-main" ng-model="filterDays" btn-radio="1">Last Day</label>
+        <label class="btn btn-main" ng-model="filterDays" btn-radio="3">Last 3 Days</label>
+        <label class="btn btn-main" ng-model="filterDays" btn-radio="7">Last Week</label>
+        <label class="btn btn-main" ng-model="filterDays" btn-radio="30">Last Month</label>
+        <label class="btn btn-main" ng-model="filterDays" btn-radio="3650">All</label>
+    </div>
+    <div class="btn-single">
+        <label class="btn btn-main" ng-model="filters.filterRates[0]" btn-checkbox>1 Star</label>
+        <label class="btn btn-main" ng-model="filters.filterRates[1]" btn-checkbox>2 Stars</label>
+        <label class="btn btn-main" ng-model="filters.filterRates[2]" btn-checkbox>3 Stars</label>
+        <label class="btn btn-main" ng-model="filters.filterRates[3]" btn-checkbox>4 Stars</label>
+        <label class="btn btn-main" ng-model="filters.filterRates[4]" btn-checkbox>5 Stars</label>
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-ok" ng-click="ok(selected)">OK</button>
-    <button class="btn btn-cancel" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-main btn-ok" ng-click="ok(selected)">OK</button>
+    <button class="btn btn-main btn-cancel" ng-click="cancel()">Cancel</button>
 </div>

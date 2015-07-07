@@ -2,7 +2,7 @@
  * Created by xing on 4/30/15.
  */
 app.controller('BrandController', ['$scope', 'brands', '$modal', function($scope, brands, $modal) {
-    brands.success(function(data) {
+    brands.getBrands().success(function(data) {
         $scope.brands = data;
     });
 

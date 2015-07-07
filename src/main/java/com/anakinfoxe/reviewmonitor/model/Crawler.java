@@ -12,6 +12,12 @@ public class Crawler {
     boolean isCrawling;
     boolean isRunning;
 
+    public Crawler() {
+        this.brand = "NO BRAND";
+        this.isCrawling = false;
+        this.isRunning = false;
+    }
+
     public Crawler(String brand) {
         this.brand = brand;
         this.isCrawling = false;

@@ -21,4 +21,6 @@ public interface ProductRepository {
     List<Product> loadAllByBrand(Brand brand);
 
     List<Product> loadAll();
+
+    int deleteAllByBrand(Brand brand);
 }

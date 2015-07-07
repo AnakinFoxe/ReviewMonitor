@@ -8,6 +8,8 @@ import com.anakinfoxe.reviewmonitor.repository.ProductRepository;
 import com.anakinfoxe.reviewmonitor.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,27 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         return null;
+    }
+
+    @Override
+    public int deleteAllByBrandId(Long brandId) {
+        Brand brand = brandRepository.loadById(brandId);
+
+        if (brand != null)
+            return reviewRepository.deleteByBrand(brand);
+
+        return 0;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+    @Override
+    public void changeReviewToReplied(Long reviewId) {
+        Review review = reviewRepository.loadById(reviewId);
+
+        if (review != null) {
+            review.setStatus(Review.Status.REPLIED);
+            reviewRepository.saveOrUpdate(review);
+        }
     }
 
 

@@ -12,4 +12,6 @@ public interface BrandService {
     Brand loadById(Long id);
 
     List<Brand> loadAll();
+
+    int deleteByName(String name);
 }

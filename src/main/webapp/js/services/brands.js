@@ -15,11 +15,25 @@ app.factory('brands', ['$http', 'CacheFactory', function($http, CacheFactory) {
         });
     }
 
-    return $http.get('/rm/webapi/brand/', {cache: brandsCache})
-        .success(function(data) {
-            return data;
-        })
-        .error(function(data) {
-            return data;
-        });
+    return {
+        getBrands: function() {
+            return $http.get('/rm/webapi/brand/', {cache: brandsCache})
+                .success(function (data) {
+                    return data;
+                })
+                .error(function (data) {
+                    return data;
+                });
+        },
+
+        deleteBrand: function(brand, key) {
+            return $http.delete('/rm/webapi/brand/' + brand, {params: {key: key}})
+                .success(function (data) {
+                    return data;
+                })
+                .error(function (data) {
+                    return data;
+                });
+        }
+    }
 }]);

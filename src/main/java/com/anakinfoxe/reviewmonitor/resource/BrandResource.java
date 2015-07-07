@@ -22,10 +22,27 @@ public class BrandResource {
     @Autowired
     BrandService brandService;
 
+    // TODO: might remove this from code
+    private String key_ = "WhatAGoodDay!!";
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Brand> getAll() {
         return brandService.loadAll();
+    }
+
+    @Path("{brand}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public String deleteBrand(@PathParam("brand") String brand,
+                              @DefaultValue("") @QueryParam("key") String key) {
+        if (!key.equals(key_))
+            return "Key is either not present or not correct.";
+
+        if (brandService.deleteByName(brand) != 0)
+            return brand + " successfully deleted.";
+
+        return brand + " deletion failed...";
     }
 
 

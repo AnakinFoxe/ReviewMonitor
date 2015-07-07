@@ -14,4 +14,8 @@ public interface ReviewService {
     List<Review> loadAllByBrandId(Long brandId);
 
     List<Review> loadLatestByBrandId(Long brandId, int pageNum, int pageSize);
+
+    int deleteAllByBrandId(Long brandId);
+
+    void changeReviewToReplied(Long reviewId);
 }

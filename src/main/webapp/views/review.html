@@ -1,24 +1,33 @@
 
 <div class="left btn-group">
-    <label class="btn btn-rating" ng-model="sorting.rating" btn-radio="-1"><span>Lowest</span></label>
-    <label class="btn btn-rating" ng-model="sorting.rating" btn-radio="0"><span>Off</span></label>
-    <label class="btn btn-rating" ng-model="sorting.rating" btn-radio="1"><span>Highest</span></label>
+    <label class="btn btn-main btn-rating" ng-model="sorting.rating" btn-radio="-1"><span>Lowest</span></label>
+    <label class="btn btn-main btn-rating" ng-model="sorting.rating" btn-radio="0"><span>Off</span></label>
+    <label class="btn btn-main btn-rating" ng-model="sorting.rating" btn-radio="1"><span>Highest</span></label>
 </div>
 <div class="left btn-group btn-single">
-    <label class="btn" ng-model="sorting.latest" btn-checkbox><span>Latest first</span></label>
-    <!--<label class="btn" ng-model="sorting.lowest" btn-checkbox><span>Lowest first</span></label>-->
+    <label class="btn btn-main" ng-model="sorting.latest" btn-checkbox><span>Latest first</span></label>
 </div>
 <div class="left btn-group btn-single">
-    <button class="btn btn-filter" ng-click="open()"><span>Filter</span></button>
+    <label class="btn btn-main btn-rating" ng-model="filters.filterStatus" btn-radio="-1"><span>Replied</span></label>
+    <label class="btn btn-main btn-rating" ng-model="filters.filterStatus" btn-radio="0"><span>All</span></label>
+    <label class="btn btn-main btn-rating" ng-model="filters.filterStatus" btn-radio="1"><span>New</span></label>
+</div>
+<div class="left btn-group btn-single">
+    <label class="btn btn-main" id="selectedModel" ng-click="selectModel()"><span>{{ filters.filterModel }}</span></label>
+    <!--<label class="btn btn-main btn-rating" ng-click="selectModel()"><span>All</span></label>-->
+</div>
+<div class="left btn-group btn-single">
+    <button class="btn btn-main btn-filter" ng-click="open()"><span>Filter</span></button>
 </div>
 
 <div class="container">
     <div class="left item review" ng-repeat="review in displayReviews" ng-style="color(review.status)">
-        <span class="model">{{ review.modelNum }}</span>
+        <span class="model" ng-click="selectModel(review.modelNum)">{{ review.modelNum }}</span>
         <span class="rating">{{ review.rate }} Stars</span>
-        <a href="{{ review.permalink }}" target="_blank">
-            <span class="title">{{ review.title }}</span>
-        </a>
+        <!--<a href="{{ review.permalink }}" target="_blank">-->
+            <!--<span class="title">{{ review.title }}</span>-->
+        <!--</a>-->
+        <span class="title" ng-click="openReview(review)">{{ review.title }}</span>
         <span class="date">{{ review.date | date }}</span>
     </div>
 </div>

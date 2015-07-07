@@ -3,7 +3,6 @@ package com.anakinfoxe.reviewmonitor.repository;
 import com.anakinfoxe.reviewmonitor.model.Brand;
 import com.anakinfoxe.reviewmonitor.model.Product;
 import com.anakinfoxe.reviewmonitor.model.Review;
-import org.hibernate.ScrollableResults;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -111,6 +110,15 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    @Override
+    public int deleteByBrand(Brand brand) {
+        String hql = "delete from Review g where g.brand = :brand";
+        Query query = em.createQuery(hql);
+        query.setParameter("brand", brand);
+
+        return query.executeUpdate();
     }
 
 

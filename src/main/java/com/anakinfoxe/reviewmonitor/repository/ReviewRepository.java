@@ -35,5 +35,5 @@ public interface ReviewRepository {
 
     List<Review> loadAllByBrand(Brand brand);
 
-
+    int deleteByBrand(Brand brand);
 }

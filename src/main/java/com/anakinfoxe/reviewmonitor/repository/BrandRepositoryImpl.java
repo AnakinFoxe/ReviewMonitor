@@ -66,4 +66,19 @@ public class BrandRepositoryImpl implements BrandRepository {
             return null;
         }
     }
+
+    @Override
+    public int deleteById(Long id) {
+        try {
+            String hql = "delete from Brand g where g.id = :id";
+            Query query = em.createQuery(hql);
+            query.setParameter("id", id);
+
+            return query.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
 }

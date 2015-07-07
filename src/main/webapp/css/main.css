@@ -119,6 +119,10 @@ hr {
 
 
 .btn {
+    border-radius: 0px;
+}
+
+.btn-main {
     background: #fff;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     border: 0px;
@@ -157,6 +161,13 @@ hr {
     margin: 20px 10px;
 }
 
+.btn-replied {
+    color: #fff;
+    background-color: #428bca;
+    margin: 20px 10px;
+    width: 150px;
+}
+
 .btn-before {
     color: #fff;
     background: #FF851B;
@@ -185,6 +196,16 @@ hr {
     line-height: 6px;
     text-align: center;
     border-radius: 0px;
+}
+
+.btn-modal {
+    margin: 5px auto 5px 10px;
+    height: 34px;
+    line-height: 12px;
+}
+
+.btn-group {
+    /*margin: auto;*/
 }
 
 .modal-footer .btn + .btn {
@@ -224,9 +245,13 @@ hr {
 }
 
 #addNew {
-    margin: 5px auto 5px 10px;
-    height: 34px;
-    line-height: 12px;
+    background-color: #f0ad4e;
 }
 
+#delete {
+    background-color: #ff4d4d;
+}
 
+#selectedModel {
+    width: 120px;
+}

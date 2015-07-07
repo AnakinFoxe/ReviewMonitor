@@ -164,32 +164,42 @@ public class CrawlerResource {
 
     private synchronized void startCrawling(String brand) {
         Crawler crawler = crawlerPool_.get(brand);
-        crawler.setIsCrawling(true);
+        if (crawler != null)
+            crawler.setIsCrawling(true);
     }
 
     private synchronized void startRunning(String brand) {
         Crawler crawler = crawlerPool_.get(brand);
-        crawler.setIsRunning(true);
+        if (crawler != null)
+            crawler.setIsRunning(true);
     }
 
     private synchronized void stopCrawling(String brand) {
         Crawler crawler = crawlerPool_.get(brand);
-        crawler.setIsCrawling(false);
+        if (crawler != null)
+            crawler.setIsCrawling(false);
     }
 
     private synchronized void stopRunning(String brand) {
         Crawler crawler = crawlerPool_.get(brand);
-        crawler.setIsRunning(false);
+        if (crawler != null)
+            crawler.setIsRunning(false);
     }
 
     private synchronized boolean needCrawling(String brand) {
         Crawler crawler = crawlerPool_.get(brand);
-        return crawler.isCrawling();
+        if (crawler != null)
+            return crawler.isCrawling();
+        else
+            return false;
     }
 
     private synchronized boolean needRunning(String brand) {
         Crawler crawler = crawlerPool_.get(brand);
-        return crawler.isRunning();
+        if (crawler != null)
+            return crawler.isRunning();
+        else
+            return false;
     }
 
     private synchronized List<Crawler> getAll() {

@@ -23,6 +23,16 @@ app.factory('reviews', ['$http', '$routeParams', 'CacheFactory', function($http,
                 .error(function (data) {
                     return data;
                 });
+        },
+
+        replyReview: function(id) {
+            return $http.get('/rm/webapi/review/replied/' + id)
+                .success(function (data) {
+                    return data;
+                })
+                .error(function (data) {
+                    return data;
+                });
         }
     }
 }]);
