@@ -73,6 +73,11 @@ app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function
         '+ sorting.latest + sorting.rating',
         function() {
             if ($scope.reviews) {
+                // convert to beginning of the date
+                $scope.filters.filterDateStart = new Date($scope.filters.filterDateStart);
+                $scope.filters.filterDateEnd = new Date($scope.filters.filterDateEnd);
+                $scope.filters.filterDateStart.setHours(0,0,0,0);
+                $scope.filters.filterDateEnd.setHours(0,0,0,0);
                 // first apply filter
                 // by date
                 $scope.updatedReviews = _.filter($scope.reviews, function(review) {

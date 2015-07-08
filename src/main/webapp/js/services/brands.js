@@ -15,9 +15,13 @@ app.factory('brands', ['$http', 'CacheFactory', function($http, CacheFactory) {
         });
     }
 
+    // TODO: remove in release version
+    //var host = 'http://localhost:8080';
+    var host = '';
+
     return {
         getBrands: function() {
-            return $http.get('/rm/webapi/brand/', {cache: brandsCache})
+            return $http.get(host + '/rm/webapi/brand/', {cache: brandsCache})
                 .success(function (data) {
                     return data;
                 })
@@ -27,7 +31,7 @@ app.factory('brands', ['$http', 'CacheFactory', function($http, CacheFactory) {
         },
 
         deleteBrand: function(brand, key) {
-            return $http.delete('/rm/webapi/brand/' + brand, {params: {key: key}})
+            return $http.delete(host + '/rm/webapi/brand/' + brand, {params: {key: key}})
                 .success(function (data) {
                     return data;
                 })

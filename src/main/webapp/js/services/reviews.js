@@ -14,9 +14,13 @@ app.factory('reviews', ['$http', '$routeParams', 'CacheFactory', function($http,
         });
     }
 
+    // TODO: remove in release version
+    //var host = 'http://localhost:8080';
+    var host = '';
+
     return {
         getReviews: function() {
-            return $http.get('/rm/webapi/review/brand/' + $routeParams.id, {cache: reviewsCache})
+            return $http.get(host + '/rm/webapi/review/brand/' + $routeParams.id, {cache: reviewsCache})
                 .success(function (data) {
                     return data;
                 })
@@ -26,7 +30,7 @@ app.factory('reviews', ['$http', '$routeParams', 'CacheFactory', function($http,
         },
 
         replyReview: function(id) {
-            return $http.get('/rm/webapi/review/replied/' + id)
+            return $http.get(host + '/rm/webapi/review/replied/' + id)
                 .success(function (data) {
                     return data;
                 })
