@@ -24,12 +24,17 @@ public class CrawlerResource {
     // TODO: might remove this from code
     private String key_ = "WhatAGoodDay!!";
 
+    // Note the "date" query param has been added to all of the following APIs.
+    // It is used to fix the "304 Not Modified" issue with IE.
+    // The date string was sent along with these urls so each time the url will be different.
+
 
     @Path("{brand}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String startCrawler(@PathParam("brand") String brand,
-                               @DefaultValue("") @QueryParam("key") String key) {
+                               @DefaultValue("") @QueryParam("key") String key,
+                               @DefaultValue("") @QueryParam("date") String date) {
 
         if (!key.equals(key_))
             return "Key is either not present or not correct.";
@@ -125,7 +130,8 @@ public class CrawlerResource {
     @Path("/stop/{brand}")
     @GET
     public void stopCrawler(@PathParam("brand") String brand,
-                               @DefaultValue("") @QueryParam("key") String key) {
+                            @DefaultValue("") @QueryParam("key") String key,
+                            @DefaultValue("") @QueryParam("date") String date) {
         if (key.equals(key_)) {
             stopRunning(brand);
         }
@@ -136,7 +142,8 @@ public class CrawlerResource {
     @Path("/status")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Crawler> getCrawlerStatus() {
+    public List<Crawler> getCrawlerStatus(@DefaultValue("") @QueryParam("date") String date) {
+        // ignore the date input
         return getAll();
     }
 

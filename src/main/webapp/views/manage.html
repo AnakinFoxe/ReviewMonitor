@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h3 class="modal-title">Manage the crawlers</h3>
+</div>
+<div class="modal-body">
+    <div ng-repeat="crawler in crawlers">
+        <button class="nofloat col-sm-2 btn-before"><span>{{ crawler.brand}}</span></button>
+        <progressbar class="col-sm-6 progress-striped active" value="crawler.progress" type="{{ crawler.type }}">
+            {{ crawler.status }}
+        </progressbar>
+        <button class="col-sm-2 btn  btn-main btn-after" ng-click="stop(crawler)" ng-if="crawler.running">
+            <span>{{ crawler.button }}</span>
+        </button>
+    </div>
+
+    <br>
+
+    <hr />
+
+    <div class="form-group" ng-class="{'has-error' : !inputKey}">
+        <input type="text" ng-model="inputKey" class="form-control"
+               placeholder="Please enter the secret key here (mandatory for all operations)"
+               tooltip="Case sensitive"
+               tooltip-placement="top"
+               tooltip-trigger="mouseenter"
+               tooltip-enable="!inputKey" />
+    </div>
+
+    <div class="col-sm-6 form-group">
+        <input type="text" ng-model="inputBrand" class="form-control"
+               placeholder="Brand name" />
+    </div>
+    <button class="btn btn-main btn-modal" id="addNew" ng-click="add()"><span>Add</span></button>
+    <button class="btn btn-main btn-modal" id="delete" ng-click="delete()"><span>Delete</span></button>
+
+</div>
+<div class="modal-footer">
+    <button class="btn  btn-main btn-ok" ng-click="close()">Close</button>
+</div>
