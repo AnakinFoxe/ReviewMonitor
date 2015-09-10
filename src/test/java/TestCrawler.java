@@ -155,7 +155,12 @@ public class TestCrawler {
 
         int correct = 0;
         for (String productId : reviewNum.keySet()) {
-            Map<String, Review> reviews = rc.crawl(productId);
+            Map<String, Review> reviews = null;
+            try {
+                reviews = rc.crawl(productId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             if (reviews.size() == reviewNum.get(productId))
                 ++correct;

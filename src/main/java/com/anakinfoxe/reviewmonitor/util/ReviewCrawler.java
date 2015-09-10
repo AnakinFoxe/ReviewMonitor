@@ -47,7 +47,7 @@ public class ReviewCrawler {
     private final String URL_PERMALINK_ = "http://www.amazon.com/review/";
 
     // Regular Expression Patterns
-    //private final Pattern PTN_RATE_     = Pattern.compile("([\\d]).0 out of 5 stars");
+    private final Pattern PTN_RATE_     = Pattern.compile("([\\d]).0 out of 5 stars");
     private final Pattern PTN_HELP_     = Pattern.compile("([\\d]+) of ([\\d]+) people found the following review helpful");
     private final Pattern PTN_NAME_     = Pattern.compile("http://www.amazon.com/review/([a-zA-Z0-9]+)");
     private final Pattern PTN_DATE_     = Pattern.compile("on (.+)");
@@ -78,7 +78,7 @@ public class ReviewCrawler {
         return sb.toString();
     }
 
-    private Review parseReview(Element review) {
+    private Review parseReview(Element review) throws Exception {
         Review reviewObj = new Review();
 
         // find elements using selector
@@ -90,10 +90,13 @@ public class ReviewCrawler {
 
         // convert string description of rate into integer
         if (rate != null) {
-            //Matcher rateMatcher = PTN_RATE_.matcher(rate.ownText());
-            //if (rateMatcher.find())
-                //reviewObj.setRate(Integer.parseInt(rateMatcher.group(1)));
-            reviewObj.setRate(Integer.parseInt(rate.ownText().trim()));
+            // Xing: Amazon changed rating text from pure number back to "3.7 out of 5 stars" format
+            Matcher rateMatcher = PTN_RATE_.matcher(rate.ownText());
+            if (rateMatcher.find())
+                reviewObj.setRate(Integer.parseInt(rateMatcher.group(1)));
+            else
+                throw new Exception("No Rating Information Found: " + rate.toString());
+//            reviewObj.setRate(Integer.parseInt(rate.ownText().trim()));
         }
 
         if (title != null)
@@ -134,7 +137,7 @@ public class ReviewCrawler {
         return reviewObj;
     }
 
-    private Map<String, Review> scrapePage(String pageUrl) {
+    private Map<String, Review> scrapePage(String pageUrl) throws Exception {
         for (int retry = 1; retry <= maxRetries_; ++retry) {
             Map<String, Review> reviewObjs = new HashMap<>();
 
@@ -179,7 +182,7 @@ public class ReviewCrawler {
      * @param productId
      * @return
      */
-    public Map<String, Review> crawl(String productId) {
+    public Map<String, Review> crawl(String productId) throws Exception {
         Map<String, Review> allReviewObjs = new HashMap<>();
 //        String firstPageUrl = getFirstPageUrl(productId);
 
@@ -210,7 +213,7 @@ public class ReviewCrawler {
     }
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         ReviewCrawler rc = new ReviewCrawler();
 
