@@ -19,7 +19,6 @@
 <div class="left btn-group btn-single">
     <button class="btn btn-main btn-filter" ng-click="open()"><span>Filter</span></button>
 </div>
-
 <div>
     <div class="left item review" ng-repeat="review in displayReviews" ng-style="color(review.status)">
         <span class="model" ng-click="selectModel(review.modelNum)">{{ review.modelNum }}</span>

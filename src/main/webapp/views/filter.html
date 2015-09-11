@@ -6,7 +6,7 @@
         <div class="col-md-6">
             <p class="input-group">
                 <input type="text" class="form-control"
-                       datepicker-popup="{{format}}" ng-model="selected.filterDateStart" is-open="startOpened"
+                       datepicker-popup="{{format}}" ng-model="tbc.filterDateStart" is-open="startOpened"
                        min-date="minDate" max-date="maxDate" show-button-bar="false" show-weeks="false"
                        ng-required="true" close-text="Close" />
                 <span class="input-group-btn">
@@ -19,7 +19,7 @@
         <div class="col-md-6">
             <p class="input-group">
                 <input type="text" class="form-control"
-                       datepicker-popup="{{format}}" ng-model="selected.filterDateEnd" is-open="endOpened"
+                       datepicker-popup="{{format}}" ng-model="tbc.filterDateEnd" is-open="endOpened"
                        min-date="minDate" max-date="maxDate"show-button-bar="false" show-weeks="false"
                        ng-required="true" close-text="Close" />
                 <span class="input-group-btn">
@@ -38,14 +38,22 @@
         <label class="btn btn-main" ng-model="filterDays" btn-radio="3650">All</label>
     </div>
     <div class="btn-single">
-        <label class="btn btn-main" ng-model="filters.filterRates[0]" btn-checkbox>1 Star</label>
-        <label class="btn btn-main" ng-model="filters.filterRates[1]" btn-checkbox>2 Stars</label>
-        <label class="btn btn-main" ng-model="filters.filterRates[2]" btn-checkbox>3 Stars</label>
-        <label class="btn btn-main" ng-model="filters.filterRates[3]" btn-checkbox>4 Stars</label>
-        <label class="btn btn-main" ng-model="filters.filterRates[4]" btn-checkbox>5 Stars</label>
+        <label class="btn btn-main" ng-model="tbc.filterRates[0]" btn-checkbox>1 Star</label>
+        <label class="btn btn-main" ng-model="tbc.filterRates[1]" btn-checkbox>2 Stars</label>
+        <label class="btn btn-main" ng-model="tbc.filterRates[2]" btn-checkbox>3 Stars</label>
+        <label class="btn btn-main" ng-model="tbc.filterRates[3]" btn-checkbox>4 Stars</label>
+        <label class="btn btn-main" ng-model="tbc.filterRates[4]" btn-checkbox>5 Stars</label>
+    </div>
+    <div id="filterModel">
+        <input type="text" ng-model="tbc.filterModel" class="form-control"
+               placeholder="All models"
+               tooltip="Input model name to filter"
+               tooltip-placement="top"
+               tooltip-trigger="mouseenter"
+               tooltip-enable="!tbc.filterModel" />
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-main btn-ok" ng-click="ok(selected)">OK</button>
+    <button class="btn btn-main btn-ok" ng-click="ok()">OK</button>
     <button class="btn btn-main btn-cancel" ng-click="cancel()">Cancel</button>
 </div>

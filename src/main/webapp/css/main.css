@@ -209,17 +209,41 @@ hr {
     /*margin: auto;*/
 }
 
+
+.resizable-modal .modal-dialog {
+    width: 80%;
+    height: 90%;
+}
+
 .modal-footer .btn + .btn {
     margin: 20px 10px;
 }
 
 .modal-body {
     padding-bottom: 10px;
+    height: 85%;
 }
 
 .modal-content {
     border-radius: 0px;
     background: #f9f9f9;
+}
+
+.modal-content {
+    height: 100%;
+}
+.review-modal {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.review-modal-iframe {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
 }
 
 .progress {
@@ -255,4 +279,13 @@ hr {
 
 #selectedModel {
     width: 120px;
+}
+
+#filterModel {
+    margin: 20px 20px 0 20px;
+}
+
+#reviewModalHeader {
+    padding: 0 20px 0;
+    text-align: right;
 }

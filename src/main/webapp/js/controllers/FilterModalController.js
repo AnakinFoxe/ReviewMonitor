@@ -26,15 +26,17 @@ app.controller('FilterModalController', function($scope, $modalInstance, filters
 
     $scope.$watch('filterDays', function() {
         if ($scope.filterDays > 0) {
-            $scope.selected.filterDateEnd = new Date();
-            $scope.selected.filterDateStart
-                = new Date().setDate($scope.selected.filterDateEnd.getDate() - $scope.filterDays);
+            $scope.tbc.filterDateEnd = new Date();
+            $scope.tbc.filterDateStart
+                = new Date().setDate($scope.tbc.filterDateEnd.getDate() - $scope.filterDays);
         }
     });
 
     /** Filters **/
     $scope.filters = filters;
-    $scope.selected = {
+
+    // tbc: to be changed
+    $scope.tbc = {
         filterDateStart: $scope.filters.filterDateStart,
         filterDateEnd: $scope.filters.filterDateEnd,
         filterRates: $scope.filters.filterRates,
@@ -42,9 +44,8 @@ app.controller('FilterModalController', function($scope, $modalInstance, filters
         filterModel: $scope.filters.filterModel
     };
 
-
-    $scope.ok = function(data) {
-        $modalInstance.close(data);
+    $scope.ok = function() {
+        $modalInstance.close($scope.tbc);
     };
 
     $scope.cancel = function() {

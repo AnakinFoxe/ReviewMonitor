@@ -63,6 +63,8 @@ app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function
 
         modalInstance.result.then(function(updatedFilters) {
             $scope.filters = updatedFilters;
+            if ($scope.filters.filterModel == '')
+                $scope.filters.filterModel = 'All Models';
         });
     };
 
@@ -105,7 +107,7 @@ app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function
                 // by model
                 if ($scope.filters.filterModel != 'All Models') {
                     $scope.updatedReviews = _.filter($scope.updatedReviews, function(review) {
-                        return review.modelNum == $scope.filters.filterModel;
+                        return review.modelNum.toUpperCase() == $scope.filters.filterModel.toUpperCase();
                     });
                 }
 
@@ -139,7 +141,8 @@ app.controller('ReviewController', ['$scope', 'reviews', '$modal', '_', function
             animation: true,
             templateUrl: 'views/reviewPage.html',
             controller: 'ReviewModalController',
-            size: 'lg',
+            //size: 'lg',
+            windowClass: 'resizable-modal',
             backdrop: 'static',
             resolve: {
                 action: function () {
