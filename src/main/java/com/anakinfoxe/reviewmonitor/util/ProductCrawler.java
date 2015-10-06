@@ -126,8 +126,11 @@ public class ProductCrawler {
                 for (Element product : products) {
                     String productId = product.attr("data-asin");
 
-                    if (productId != null && !productObjs.containsKey(productId))
-                        productObjs.put(productId, parseProduct(productId));
+                    if (productId != null && !productObjs.containsKey(productId)) {
+                        Product productObj = parseProduct(productId);
+                        if (productObj != null) // to guarantee that productObj can not be null
+                            productObjs.put(productId, productObj);
+                    }
                 }
 
                 // update url to the next page url

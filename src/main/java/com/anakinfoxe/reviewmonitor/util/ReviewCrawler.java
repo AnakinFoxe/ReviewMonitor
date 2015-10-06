@@ -152,7 +152,7 @@ public class ReviewCrawler {
                 for (Element review : reviews) {
                     Review reviewObj = parseReview(review);
 
-                    if (reviewObj.getName() != null)
+                    if (reviewObj != null && reviewObj.getName() != null)
                         reviewObjs.put(reviewObj.getName(), reviewObj);
                 }
 
