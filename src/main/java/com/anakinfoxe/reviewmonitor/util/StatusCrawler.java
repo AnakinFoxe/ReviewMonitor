@@ -67,7 +67,7 @@ public class StatusCrawler {
             } catch (IOException e) {
                 System.out.println("IOException (StatusCrawler). Retrying "
                         + retry + "/" + maxRetries_
-                        + ". " + e.getMessage());
+                        + ": " + permalink);
 
                 // incremental waiting
                 try {

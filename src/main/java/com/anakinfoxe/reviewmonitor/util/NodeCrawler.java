@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public class NodeCrawler {
 
     // CSS Query strings
-    private final String Q_LINKS_       = "a.nav_a";
+    private final String Q_LINKS_       = "a.fsdDeptLink";  // Amazon changed page source
 
     // Amazon RESTful Service API URL
     private final String URL_BASE_ = "http://www.amazon.com/gp/site-directory/ref=nav_sad";

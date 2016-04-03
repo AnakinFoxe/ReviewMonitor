@@ -68,12 +68,16 @@ public class ProductCrawler {
                 if (title != null)
                     productObj.setName(title.ownText().trim());
 
-                Element model = page.select(Q_MODEL_NUM_).first();
-                if (model != null && model.parent() != null) {
-                    String modelNum = model.parent().ownText().trim();
-                    modelNum = modelNum.toUpperCase();
 
-                    productObj.setModelNum(modelNum);
+                Element model = page.select("th:containsOwn(Item model number)").first();
+                if (model != null && model.parent() != null) {
+                    Element modelNum = model.parent().select("td.a-size-base").first();
+                    if (modelNum != null) {
+                        String modelNumStr = modelNum.ownText().trim();
+                        modelNumStr = modelNumStr.toUpperCase();
+
+                        productObj.setModelNum(modelNumStr);
+                    }
                 }
 
                 productObj.setNumOfReviewsOnPage(0);    // init as 0

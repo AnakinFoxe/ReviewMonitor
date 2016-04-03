@@ -35,10 +35,10 @@ public class CrawlerServiceImpl implements CrawlerService {
     @Autowired
     ReviewRepository reviewRepository;
 
-    private final int MAX_PRODUCT_THREAD_           = 4;
-    private final int MAX_REVIEW_THREAD_            = 8;
-    private final int MAX_RESOLVER_THREAD_          = 8;
-    private final int MAX_STATUS_THREAD_            = 8;
+    private final int MAX_PRODUCT_THREAD_           = 8;
+    private final int MAX_REVIEW_THREAD_            = 16;
+    private final int MAX_RESOLVER_THREAD_          = 16;
+    private final int MAX_STATUS_THREAD_            = 16;
 
     private final int MAX_AWAIT_HOURS_4_PRODUCT_    = 2;
     private final int MAX_AWAIT_HOURS_4_REVIEW_     = 4;
@@ -120,7 +120,16 @@ public class CrawlerServiceImpl implements CrawlerService {
             // check database info
             Product savedProduct = productRepository.loadByProductId(product.getProductId());
 
+//            if (product.getProductId().equals("B015E26M14")
+//                    || product.getProductId().equals("B015E2XC0I"))
+//                System.out.println("xing: crawled=" + product.getNumOfReviewsOnPage());
+
             if (savedProduct != null) {
+//                if (savedProduct.getProductId().equals("B015E26M14")
+//                        || savedProduct.getProductId().equals("B015E2XC0I"))
+//                    System.out.println("xing: crawled=" + savedProduct.getNumOfReviewsOnPage());
+
+
                 // if review number does not change, do not crawl
                 if (savedProduct.getNumOfReviewsOnPage().equals(product.getNumOfReviewsOnPage()))
                     continue;
